@@ -1,107 +1,103 @@
 #!/usr/bin/python3
-"""
+"""Solves the N-qn puzzle"""
 
-This module contains an algorithm that resolves the N-Queen puzzle
-using backtracking
-
-"""
+import sys
 
 
-def isSafe(m_queen, nqueen):
-    """ Method that determines if the queens can or can't kill each other
-
-    Args:
-        m_queen: array that has the queens positions
-        nqueen: queen number
-
-    Returns:
-        True: when queens can't kill each other
-        False: when some of the queens can kill
-
-    """
-
-    for i in range(nqueen):
-
-        if m_queen[i] == m_queen[nqueen]:
-            return False
-
-        if abs(m_queen[i] - m_queen[nqueen]) == abs(i - nqueen):
-            return False
-
-    return True
+def bd_initialisatio(n):
+    """Initialize."""
+    bd = []
+    [bd.append([]) for i in range(n)]
+    [wr.append(' ') for i in range(n) for wr in bd]
+    return (bd)
 
 
-def print_result(m_queen, nqueen):
-    """ Method that prints the list with the Queens positions
-
-    Args:
-        m_queen: array that has the queens positions
-        nqueen: queen number
-
-    """
-
-    res = []
-
-    for i in range(nqueen):
-        res.append([i, m_queen[i]])
-
-    print(res)
+def bd_dcp(bd):
+    """Return a bd_dcp."""
+    if isinstance(bd, list):
+        return list(map(bd_dcp, bd))
+    return (bd)
 
 
-def Queen(m_queen, nqueen):
-    """ Recursive function that executes the Backtracking algorithm
-
-    Args:
-        m_queen: array that has the queens positions
-        nqueen: queen number
-
-    """
-
-    if nqueen is len(m_queen):
-        print_result(m_queen, nqueen)
-        return
-
-    m_queen[nqueen] = -1
-
-    while((m_queen[nqueen] < len(m_queen) - 1)):
-
-        m_queen[nqueen] += 1
-
-        if isSafe(m_queen, nqueen) is True:
-
-            if nqueen is not len(m_queen):
-                Queen(m_queen, nqueen + 1)
+def stl_get(bd):
+    """Return the list."""
+    slt = []
+    for r in range(len(bd)):
+        for c in range(len(bd)):
+            if bd[r][c] == "Q":
+                slt.append([r, c])
+                break
+    return (slt)
 
 
-def solveNQueen(size):
-    """ Function that invokes the Backtracking algorithm
+def xout(bd, wr, col):
+    """something here."""
 
-    Args:
-        size: size of the chessboard
+    for c in range(col + 1, len(bd)):
+        bd[wr][c] = "x"
 
-    """
+    for c in range(col - 1, -1, -1):
+        bd[wr][c] = "x"
 
-    m_queen = [-1 for i in range(size)]
+    for r in range(wr + 1, len(bd)):
+        bd[r][col] = "x"
 
-    Queen(m_queen, 0)
+    for r in range(wr - 1, -1, -1):
+        bd[r][col] = "x"
+    c = col + 1
+    for r in range(wr + 1, len(bd)):
+        if c >= len(bd):
+            break
+        bd[r][c] = "x"
+        c += 1
+    c = col - 1
+    for r in range(wr - 1, -1, -1):
+        if c < 0:
+            break
+        bd[r][c]
+        c -= 1
+    c = col + 1
+    for r in range(wr - 1, -1, -1):
+        if c >= len(bd):
+            break
+        bd[r][c] = "x"
+        c += 1
+    c = col - 1
+    for r in range(wr + 1, len(bd)):
+        if c < 0:
+            break
+        bd[r][c] = "x"
+        c -= 1
 
 
-if __name__ == '__main__':
+def rc_slt(bd, wr, qn, slt):
+    """rc puzzle."""
+    if qn == len(bd):
+        slt.append(stl_get(bd))
+        return (slt)
 
-    import sys
+    for c in range(len(bd)):
+        if bd[wr][c] == " ":
+            tmp_bd = bd_dcp(bd)
+            tmp_bd[wr][c] = "Q"
+            xout(tmp_bd, wr, c)
+            slt = rc_slt(tmp_bd, wr + 1, qn + 1, slt)
 
-    if len(sys.argv) == 1 or len(sys.argv) > 2:
-        print("Usage: nqueens N")
+    return (slt)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: nqn N")
         sys.exit(1)
-
-    try:
-        size = int(sys.argv[1])
-    except:
+    if sys.argv[1].isdigit() is False:
         print("N must be a number")
         sys.exit(1)
-
-    if size < 4:
+    if int(sys.argv[1]) < 4:
         print("N must be at least 4")
         sys.exit(1)
 
-    solveNQueen(size)
+    bd = bd_initialisatio(int(sys.argv[1]))
+    slt = rc_slt(bd, 0, 0, [])
+    for sol in slt:
+        print(sol)
