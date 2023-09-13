@@ -1,23 +1,19 @@
 #!/usr/bin/python3
 """
-more class base
+    This module returns the list of available attributes
+    and methods of an object
 """
-
-
 Rectangle = __import__('9-rectangle').Rectangle
 
 
-"""
-Square class
-"""
-
-
 class Square(Rectangle):
-    """ Square Class """
+    """ Class that defines a Square from Rectangle class """
     def __init__(self, size):
-        """ size init"""
+        """ Method that initializes a Square """
+        self.integer_validator("size", size)
         self.__size = size
         super().__init__(self.__size, self.__size)
 
-    def __str__(self):
-        return ("[Square] " + str(self.__size) + "/" + str(self.__size))
+    def area(self):
+        """ Method that returns a string with the area """
+        return super().area()
