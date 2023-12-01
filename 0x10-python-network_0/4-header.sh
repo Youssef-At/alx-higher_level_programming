@@ -1,3 +1,4 @@
 #!/bin/bash
-# Send a GET request to a given URL with a header variable.
+# takes in a URL as an argument, sends a GET request to the URL, and displays the body of the response
+#by you ataifa
 curl -s -H "X-HolbertonSchool-User-Id: 98" "$1"
